@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	db "github.com/techshool/simplebank/db/sqlc"
-	"github.com/techshool/simplebank/token"
-	"github.com/techshool/simplebank/util"
+	db "github.com/huangiris17/simplebank/db/sqlc"
+	"github.com/huangiris17/simplebank/token"
+	"github.com/huangiris17/simplebank/util"
 )
 
 type Server struct {
@@ -40,6 +40,7 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.logingUser)
+	router.POST("/token/renew_access", server.renewAccessToken)
 
 	authRouter := router.Group("/").Use(authMiddleware(server.tokenMaker))
 

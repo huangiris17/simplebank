@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	db "github.com/huangiris17/simplebank/db/sqlc"
+	"github.com/huangiris17/simplebank/util"
 	"github.com/lib/pq"
-	db "github.com/techshool/simplebank/db/sqlc"
-	"github.com/techshool/simplebank/util"
 )
 
 type createUserRequest struct {
@@ -80,8 +80,8 @@ type loginUserResponse struct {
 	SessionID             uuid.UUID    `json:"session_id"`
 	AccessToken           string       `json:"access_token"`
 	AccessTokenExpiresAt  time.Time    `json:"access_token_expires_at"`
-	RefreshToken          string       `json:"access_token"`
-	RefreshTokenExpiresAt time.Time    `json:"access_token_expires_at"`
+	RefreshToken          string       `json:"refresh_token"`
+	RefreshTokenExpiresAt time.Time    `json:"refresh_token_expires_at"`
 	User                  userResponse `json:"user"`
 }
 
@@ -132,8 +132,8 @@ func (server *Server) logingUser(ctx *gin.Context) {
 		ID:           refreshPayload.ID,
 		Username:     user.Username,
 		RefreshToken: refreshToken,
-		UserAgent:    "",
-		ClientIp:     "",
+		UserAgent:    ctx.Request.UserAgent(),
+		ClientIp:     ctx.ClientIP(),
 		IsBlocked:    false,
 		ExpiresAt:    refreshPayload.ExpiredAt,
 	})

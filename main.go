@@ -5,10 +5,10 @@ import (
 	"log"
 
 	_ "github.com/golang/mock/mockgen/model"
+	"github.com/huangiris17/simplebank/api"
+	db "github.com/huangiris17/simplebank/db/sqlc"
+	"github.com/huangiris17/simplebank/util"
 	_ "github.com/lib/pq"
-	"github.com/techshool/simplebank/api"
-	db "github.com/techshool/simplebank/db/sqlc"
-	"github.com/techshool/simplebank/util"
 )
 
 func main() {
