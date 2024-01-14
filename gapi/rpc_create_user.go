@@ -7,6 +7,7 @@ import (
 	"github.com/huangiris17/simplebank/pb"
 	"github.com/huangiris17/simplebank/util"
 	"github.com/huangiris17/simplebank/val"
+	"github.com/huangiris17/simplebank/worker"
 	"github.com/lib/pq"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -40,6 +41,14 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		}
 	}
 	// send verification email
+	taskPayload := &worker.PayloadSendVerifyEmail{
+		Username: user.Username,
+	}
+	err = server.taskDistributor.DistributeTaskSendVerifyEmail(ctx, taskPayload)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to distribute task to send email: %s", err)
+	}
+
 	rsp := &pb.CreateUserResponse{
 		User: convertUser(user),
 	}
